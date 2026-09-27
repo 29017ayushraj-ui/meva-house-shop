@@ -1,0 +1,34 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: meva-house-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: meva_house
+      POSTGRES_USER: meva
+      POSTGRES_PASSWORD: meva_local_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - meva_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U meva -d meva_house"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://meva:meva_local_password@postgres:5432/meva_house?schema=public
+      AUTH_SECRET: local-container-secret-change-before-deploy
+      ADMIN_EMAIL: admin@mevahouse.local
+      ADMIN_PASSWORD: change-me-now
+    ports:
+      - "3000:3000"
+
+volumes:
+  meva_postgres_data:

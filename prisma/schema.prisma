@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime @default(now())
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime @default(now())
+}
+
+model OtpCode {
+  id        String    @id @default(cuid())
+  email     String
+  codeHash  String
+  purpose   OtpPurpose @default(ADMIN_LOGIN)
+  expiresAt DateTime
+  attempts  Int       @default(0)
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([email, createdAt])
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  hindiName   String
+  description String
+  price       Decimal  @db.Decimal(10, 2)
+  unit        String
+  badge       String
+  imageUrl    String
+  category    String
+  featured    Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  customerName String
+  customerEmail String?
+  phone       String
+  address     String
+  items       Json        @default("[]")
+  total       Decimal     @db.Decimal(10, 2)
+  status      OrderStatus @default(PENDING)
+  paymentStatus String    @default("PENDING")
+  createdAt   DateTime    @default(now())
+}
+
+enum OtpPurpose {
+  ADMIN_LOGIN
+  PASSWORD_RESET
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PACKED
+  DELIVERED
+  CANCELLED
+}

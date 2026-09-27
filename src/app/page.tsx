@@ -1,69 +1,22 @@
-import Image from "next/image";
+import { ArrowUpRight, Leaf, ShieldCheck, ShoppingBag, Sparkles, Truck } from "lucide-react";
+import Link from "next/link";
+import Storefront from "@/components/storefront";
+import { getProducts } from "@/lib/catalog";
+import { getSession } from "@/lib/auth";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+export default async function Home() {
+  const products = await getProducts();
+  const session = await getSession();
+  return <div className="min-h-screen overflow-hidden">
+    <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10"><Link href="#home" className="display text-2xl font-bold tracking-tight text-[var(--forest)]">The Meva House<span className="text-[var(--clay)]">.</span></Link><nav className="hidden items-center gap-8 text-sm font-semibold text-[var(--muted)] md:flex"><Link href="#about">Our promise</Link><Link href="#products">Collection</Link><Link href="#contact">Contact</Link></nav><div className="flex items-center gap-2"><Link href={session?.role === "USER" ? "/account" : "/login"} className="hidden rounded-full px-3 py-2 text-sm font-bold text-[var(--muted)] transition hover:text-[var(--forest)] sm:block">{session?.role === "USER" ? "My account" : "Sign in"}</Link><Link href="/admin/login" className="flex items-center gap-2 rounded-full border border-[var(--forest)]/20 px-4 py-2 text-sm font-semibold text-[var(--forest)] transition hover:bg-[var(--forest)] hover:text-white"><ShoppingBag size={16} /> Manage shop</Link></div></header>
+    <main>
+      <section id="home" className="grain mx-4 grid min-h-[620px] overflow-hidden rounded-[2rem] bg-[var(--forest)] text-white lg:grid-cols-[1.05fr_.95fr]"><div className="flex flex-col justify-center px-8 py-16 sm:px-16 lg:px-20"><p className="rise-in mb-6 flex items-center gap-2 text-sm font-semibold uppercase tracking-[.22em] text-[var(--gold)]"><Leaf size={16} /> Society-local, thoughtfully sourced</p><h1 className="display rise-in max-w-2xl text-5xl leading-[.98] sm:text-7xl">Good things grow from <em className="font-normal text-[var(--gold)]">small beginnings.</em></h1><p className="rise-in mt-7 max-w-lg text-base leading-7 text-white/70">Premium dry fruits, packed with care and delivered fresh to your doorstep. A little daily ritual for the people you love.</p><div className="rise-in mt-9 flex flex-wrap gap-3"><Link href="#products" className="flex items-center gap-2 rounded-full bg-[var(--gold)] px-6 py-3 text-sm font-bold text-[var(--forest)] transition hover:bg-white">Shop the collection <ArrowUpRight size={17} /></Link><Link href="#about" className="rounded-full border border-white/25 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10">Why Meva House</Link></div></div><div className="relative min-h-[360px] overflow-hidden bg-[#d6e5c7]"><img src="https://the-meva-house.vercel.app/PHOTO-2026-05-05-08-46-52.jpg" alt="Premium walnut kernels" className="h-full w-full object-cover mix-blend-multiply" /><div className="absolute bottom-7 left-7 rounded-2xl bg-[var(--paper)]/90 p-4 text-[var(--forest)] shadow-xl backdrop-blur-sm"><p className="text-xs font-bold uppercase tracking-[.2em] text-[var(--clay)]">House favourite</p><p className="display mt-1 text-2xl">Orchid walnuts</p></div></div></section>
+      <section id="about" className="mx-auto grid max-w-7xl gap-12 px-6 py-24 lg:grid-cols-[.7fr_1.3fr] lg:px-10"><div><p className="text-sm font-bold uppercase tracking-[.22em] text-[var(--clay)]">The Meva House promise</p><h2 className="display mt-4 text-4xl leading-tight text-[var(--forest)] sm:text-5xl">Simple food.<br />Handled with <em className="font-normal">feeling.</em></h2></div><div className="grid gap-8 border-t border-[var(--forest)]/15 pt-8 sm:grid-cols-3"><div><Leaf className="text-[var(--clay)]" size={24} /><h3 className="mt-5 font-bold">Naturally good</h3><p className="mt-2 text-sm leading-6 text-[var(--muted)]">No preservatives. Just honest, premium dry fruits.</p></div><div><Truck className="text-[var(--clay)]" size={24} /><h3 className="mt-5 font-bold">Close to home</h3><p className="mt-2 text-sm leading-6 text-[var(--muted)]">Freshly packed and delivered within your society.</p></div><div><ShieldCheck className="text-[var(--clay)]" size={24} /><h3 className="mt-5 font-bold">Pay on delivery</h3><p className="mt-2 text-sm leading-6 text-[var(--muted)]">Cash on delivery, because trust comes first.</p></div></div></section>
+      <section className="bg-[var(--paper)] px-6 py-16 lg:px-10"><div className="mx-auto max-w-7xl"><div className="flex items-end justify-between gap-6"><div><p className="text-xs font-bold uppercase tracking-[.22em] text-[var(--clay)]">Browse by mood</p><h2 className="display mt-3 text-4xl text-[var(--forest)]">Find your kind of good.</h2></div><p className="hidden max-w-xs text-sm leading-6 text-[var(--muted)] sm:block">From everyday crunch to generous gifting, there is a little ritual for every table.</p></div><div className="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4"><Link href="#products" className="category-tile bg-[#e4d3b7]"><span className="display text-2xl text-[var(--forest)]">Raw nuts</span><span className="text-xs font-bold uppercase tracking-wider text-[var(--forest)]/60">Pure crunch</span></Link><Link href="#products" className="category-tile bg-[#d4dfc7]"><span className="display text-2xl text-[var(--forest)]">Roasted</span><span className="text-xs font-bold uppercase tracking-wider text-[var(--forest)]/60">Golden & savoury</span></Link><Link href="#products" className="category-tile bg-[#e8c8b6]"><span className="display text-2xl text-[var(--forest)]">Dried fruits</span><span className="text-xs font-bold uppercase tracking-wider text-[var(--forest)]/60">Sun-kissed</span></Link><Link href="#products" className="category-tile bg-[#d9c9d5]"><span className="display text-2xl text-[var(--forest)]">Gift boxes</span><span className="text-xs font-bold uppercase tracking-wider text-[var(--forest)]/60">Made to share</span></Link></div></div></section>
+      <section id="products" className="bg-[var(--paper)] px-6 pb-24 lg:px-10"><div className="mx-auto max-w-7xl"><div className="flex flex-wrap items-end justify-between gap-5"><div><p className="flex items-center gap-2 text-sm font-bold uppercase tracking-[.22em] text-[var(--clay)]"><Sparkles size={15} /> Our collection</p><h2 className="display mt-3 text-5xl text-[var(--forest)]">For the everyday <em className="font-normal">good.</em></h2></div><p className="max-w-xs text-sm leading-6 text-[var(--muted)]">Small-batch favourites selected for crunch, flavour, and the people around your table.</p></div><Storefront products={products} /></div></section>
+    </main>
+    <footer id="contact" className="bg-[var(--forest)] px-6 py-14 text-white lg:px-10"><div className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-8"><div><p className="display text-3xl">The Meva House<span className="text-[var(--gold)]">.</span></p><p className="mt-3 text-sm text-white/60">Pure. Fresh. Delivered to your door.</p></div><div className="text-sm text-white/70"><p>WhatsApp orders: <a className="font-bold text-[var(--gold)]" href="https://wa.me/919142833856">+91 91428 33856</a></p><p className="mt-2">Society-local delivery · 9 AM - 9 PM</p></div></div></footer>
+  </div>;
 }
+
+

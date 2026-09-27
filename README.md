@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# The Meva House
 
-## Getting Started
+A production-minded Next.js storefront for premium dry fruits, with a protected admin portal, Prisma/PostgreSQL catalog management, Docker Compose, and GitHub Actions CI/CD.
 
-First, run the development server:
+## Local development
+
+1. Install Node.js 24 and Docker Desktop.
+2. Copy `.env.example` to `.env.local` and change `AUTH_SECRET` and `ADMIN_PASSWORD`.
+3. Start PostgreSQL and the app:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+docker compose up --build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. In a second terminal, create the schema and seed the catalog:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npx prisma migrate dev --name init
+npm run db:seed
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Without Docker/Postgres, the storefront still renders the fallback catalog. Product writes require `DATABASE_URL` and a running database.
 
-## Learn More
+For the current Windows setup, the user-owned PostgreSQL cluster runs on port `5433` and is started with `powershell -ExecutionPolicy Bypass -File .\scripts\start-local-postgres.ps1`. The app is already configured for that port in `.env.local`.
 
-To learn more about Next.js, take a look at the following resources:
+Admin: `http://localhost:3000/admin`
+Default local credentials: `admin@mevahouse.local` / `change-me-now` (change before deployment).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Email OTP login
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Customer accounts use the `User` schema with email/password registration, login, and forgot-password OTP reset. Admin accounts use the separate `Admin` schema and a single-use 6-digit email OTP login. OTPs are hashed in PostgreSQL, expire after 10 minutes, and are limited to 5 attempts. Email delivery uses [Resend](https://resend.com), which has a free monthly tier. Create a Resend account, create an API key, verify a sending domain (or use the provider's development sender for testing), then set `RESEND_API_KEY` and `EMAIL_FROM` in `.env.local` and in Vercel. Restart Next.js after changing env values. Without a Resend key, development mode prints the OTP in the server terminal for local testing; production intentionally refuses to send.
 
-## Deploy on Vercel
+## Validation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run lint
+npm run typecheck
+npm run build
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment
+
+- **Vercel:** add `DATABASE_URL`, `AUTH_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `NEXT_PUBLIC_WHATSAPP` to the project environment, then deploy the Next.js app. Use a hosted PostgreSQL provider such as Neon, Supabase, or Vercel Postgres.
+- **Docker:** build the included `Dockerfile` and provide the same environment variables at runtime. Run migrations before serving: `npx prisma migrate deploy`.
+- **CI:** `.github/workflows/ci.yml` runs Postgres-backed Prisma validation, lint, typecheck, and build for pushes and pull requests. `.github/workflows/deploy.yml` deploys version tags through Vercel using `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` repository secrets.
+- **Custom domain:** in Vercel, add the GoDaddy domain and copy the DNS records Vercel shows into GoDaddy. The domain purchase and DNS changes require your GoDaddy/Vercel accounts and cannot be completed from this local workspace.
+
+## Data model
+
+The database stays intentionally small: `User` for admin access, `Product` for editable catalog content, and `Order` for the COD order lifecycle. Product images are URL-based so the admin portal can remain simple; object storage can be added later without changing the product model.
