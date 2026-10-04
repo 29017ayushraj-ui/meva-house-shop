@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import HeroScene from "@/components/hero-scene";
 import HeroReveal from "@/components/hero-reveal";
+import CrumbTrail from "@/components/crumb-trail";
 import Storefront from "@/components/storefront";
 import { getProducts } from "@/lib/catalog";
 import { getSession } from "@/lib/auth";
@@ -29,42 +30,39 @@ export default async function Home() {
         <div className="mx-auto flex max-w-7xl items-center justify-center gap-2">
           <Sparkles size={13} className="text-[var(--gold)]" />
           <span>
-            Society Express Delivery: <strong>Free doorstep delivery within 60 minutes</strong> &bull; Cash & UPI on Delivery
+            A fresher pantry, close to home <strong className="text-[var(--gold-light)]">Free society delivery within 60 minutes</strong>
           </span>
         </div>
       </div>
 
       {/* Main Navigation Header */}
-      <header className="sticky top-0 z-30 border-b border-[var(--card-border)] bg-white/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
+      <header className="sticky top-0 z-30 border-b border-[var(--card-border)] bg-[#fffefa]/95 backdrop-blur-md">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3.5 lg:px-10">
           {/* Brand Logo */}
           <Link href="/" className="group flex items-center gap-2.5">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--forest)] text-[var(--gold)] transition group-hover:scale-105">
               <Leaf size={20} />
             </div>
             <div>
-              <span className="display text-2xl font-bold tracking-tight text-[var(--forest)] block leading-none">
-                The Meva House<span className="text-[var(--clay)]">.</span>
+              <span className="display text-[22px] font-bold text-[var(--forest)] block leading-none">
+                meva<span className="text-[var(--clay)]">.</span>house
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--muted)] block mt-0.5">
-                Artisanal Dry Fruits
+              <span className="text-[9px] font-bold uppercase tracking-[0.17em] text-[var(--muted)] block mt-1">
+                A good daily handful
               </span>
             </div>
           </Link>
 
           {/* Navigation Links */}
           <nav className="hidden items-center gap-8 text-sm font-semibold text-[var(--muted)] md:flex">
+            <Link href="#categories" className="hover:text-[var(--forest)] transition">
+              Shop by type
+            </Link>
             <Link href="#collection" className="hover:text-[var(--forest)] transition">
-              Collection
+              Best sellers
             </Link>
             <Link href="#promise" className="hover:text-[var(--forest)] transition">
-              Our Promise
-            </Link>
-            <Link href="#categories" className="hover:text-[var(--forest)] transition">
-              Varieties
-            </Link>
-            <Link href="#contact" className="hover:text-[var(--forest)] transition">
-              Contact & WhatsApp
+              Our promise
             </Link>
           </nav>
 
@@ -88,11 +86,12 @@ export default async function Home() {
             )}
 
             <Link
-              href="/admin/login"
-              className="flex items-center gap-1.5 rounded-full border border-[var(--forest)]/20 px-3.5 py-2 text-xs font-semibold text-[var(--forest)] transition hover:bg-[var(--forest)] hover:text-white"
+              href="#collection"
+              className="flex items-center gap-2 rounded-full bg-[var(--forest)] px-4 py-2.5 text-xs font-bold text-white transition hover:bg-[var(--clay)]"
             >
               <ShoppingBag size={14} />
-              <span>Admin</span>
+              <span className="hidden sm:inline">Shop pantry</span>
+              <span className="sm:hidden">Shop</span>
             </Link>
           </div>
         </div>
@@ -100,100 +99,110 @@ export default async function Home() {
 
       <main>
         {/* Hero Section */}
-        <section className="mx-4 mt-4 lg:mx-8">
-          <div className="grain relative grid min-h-[600px] overflow-hidden rounded-[2.5rem] bg-[var(--forest)] text-white shadow-xl lg:grid-cols-[1.1fr_0.9fr]">
+        <section className="hero-band relative overflow-hidden">
+          <div className="hero-inner relative mx-auto grid max-w-[1500px] items-center gap-3 px-5 py-5 sm:min-h-[600px] sm:gap-4 sm:px-8 sm:py-8 lg:min-h-[620px] lg:grid-cols-[0.92fr_1.08fr] lg:px-14 lg:py-10">
             {/* Left Column: Hero Copy */}
-            <div className="flex flex-col justify-center px-8 py-16 sm:px-14 lg:px-20 z-10">
-              <div className="rise-in mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[.2em] text-[var(--gold)] backdrop-blur-xs w-fit">
-                <Leaf size={14} />
-                <span>Small Batch &bull; Society Sourced</span>
+            <div className="relative z-10 flex flex-col justify-center py-3 sm:py-8 lg:py-12">
+              <div className="rise-in mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-[var(--forest)]/10 bg-white/80 px-3.5 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--forest)] shadow-sm sm:mb-6">
+                <span className="h-2 w-2 rounded-full bg-[#66a66b] shadow-[0_0_0_4px_rgba(102,166,107,0.13)]" />
+                <span>Small batches, big goodness</span>
               </div>
 
-              <h1 className="display rise-in text-4xl leading-[1.05] sm:text-6xl lg:text-7xl font-normal">
-                Pure dry fruits for your <em className="font-normal text-[var(--gold)] italic">daily ritual.</em>
+              <h1 className="display rise-in max-w-[700px] text-[clamp(2.5rem,6vw,5.4rem)] font-normal leading-[0.99] text-[var(--forest)]">
+                A little joy in <span className="relative inline-block text-[var(--clay)] italic">every handful.</span>
               </h1>
 
-              <p className="rise-in mt-6 max-w-lg text-base leading-7 text-white/75">
-                Single-origin Kashmiri walnuts, hand-sorted California almonds, sun-dried apricots, and raw seeds. Delivered fresh within your society with complete trust.
+              <p className="rise-in mt-4 max-w-lg text-[14px] leading-6 text-[var(--muted)] sm:mt-6 sm:text-base sm:leading-7">
+                Meet your new pantry staples: handpicked walnuts, crisp almonds, sun-sweet fruit and little everyday superfoods.
               </p>
 
               {/* CTAs */}
-              <div className="rise-in mt-8 flex flex-wrap items-center gap-3">
+              <div className="rise-in mt-6 flex flex-wrap items-center gap-3 sm:mt-8">
                 <Link
                   href="#collection"
-                  className="flex items-center gap-2 rounded-full bg-[var(--gold)] px-7 py-3.5 text-sm font-bold text-[var(--forest)] shadow-lg transition hover:bg-white active:scale-95"
+                  className="bounce-cta flex items-center gap-2 rounded-lg bg-[#5b9b55] px-6 py-3.5 text-sm font-bold text-white shadow-[0_8px_22px_rgba(52,105,50,0.18)] hover:bg-[var(--forest)]"
                 >
-                  <span>Explore Collection</span>
-                  <ArrowUpRight size={17} />
+                  <span className="cta-bounce-icon"><ShoppingBag size={16} /></span>
+                  <span>Shop the pantry</span>
+                  <ArrowUpRight size={15} className="cta-bounce-arrow" />
                 </Link>
                 <Link
                   href="#promise"
-                  className="rounded-full border border-white/20 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-white/10"
+                  className="hidden items-center gap-2 rounded-lg border border-[var(--forest)]/15 bg-white/65 px-5 py-3.5 text-sm font-bold text-[var(--forest)] transition hover:border-[var(--forest)]/35 hover:bg-white sm:flex"
                 >
-                  Why The Meva House
+                  Why Meva House <ArrowUpRight size={15} />
                 </Link>
               </div>
 
-              {/* Trust Metric Chips */}
-              <div className="rise-in mt-12 grid grid-cols-3 gap-4 border-t border-white/15 pt-6 text-xs">
+              {/* Compact dashboard-style pantry indicators */}
+              <div className="rise-in mt-10 hidden max-w-[560px] grid-cols-3 border-y border-[var(--forest)]/10 py-4 text-xs sm:grid">
                 <div>
-                  <div className="flex items-center gap-1 text-[var(--gold)] font-bold text-sm">
-                    <Star size={14} className="fill-[var(--gold)]" />
-                    <span>4.9 / 5</span>
+                  <div className="flex items-center gap-1.5 text-[var(--forest)] font-bold text-sm">
+                    <Star size={14} className="fill-[#edb93b] text-[#edb93b]" />
+                    <span>4.9 rated</span>
                   </div>
-                  <p className="mt-1 text-white/60">Society Rated</p>
+                  <p className="mt-1.5 text-[var(--muted)]">By local homes</p>
                 </div>
-                <div>
-                  <div className="font-bold text-sm text-white">100% Raw</div>
-                  <p className="mt-1 text-white/60">Zero Preservatives</p>
+                <div className="border-l border-[var(--forest)]/10 pl-4">
+                  <div className="font-bold text-sm text-[var(--forest)]">100% raw</div>
+                  <p className="mt-1.5 text-[var(--muted)]">Nothing unnecessary</p>
                 </div>
-                <div>
-                  <div className="font-bold text-sm text-[var(--gold)]">&lt; 60 Mins</div>
-                  <p className="mt-1 text-white/60">Doorstep Delivery</p>
+                <div className="border-l border-[var(--forest)]/10 pl-4">
+                  <div className="font-bold text-sm text-[var(--forest)]">&lt; 60 min</div>
+                  <p className="mt-1.5 text-[var(--muted)]">Society delivery</p>
                 </div>
               </div>
             </div>
 
-            {/* Right Column: Hero Visual with Overlay Card */}
-            <div className="relative min-h-[380px] overflow-hidden bg-[#d8c4a9] lg:min-h-full">
+            {/* Right Column: product-led still life with the interactive 3D bowl */}
+            <div className="hero-art relative mx-auto min-h-[190px] w-full max-w-[720px] overflow-hidden sm:min-h-[430px] lg:min-h-[560px]">
+              <div className="hero-art-wash absolute inset-[8%_4%_7%_4%] rounded-[48%_52%_43%_57%/46%_43%_57%_54%] bg-[#dce9cf]" />
               <img
                 src="https://the-meva-house.vercel.app/PHOTO-2026-05-05-08-46-52.jpg"
                 alt="Premium hand-sorted Kashmiri walnuts"
-                className="absolute inset-0 h-full w-full object-cover opacity-45 mix-blend-multiply transition duration-700 hover:scale-105"
+                className="hero-art-photo absolute inset-[9%_7%_8%_8%] h-[82%] w-[85%] rounded-[48%_52%_46%_54%/43%_44%_56%_57%] object-cover opacity-30 mix-blend-multiply"
               />
-              <div className="absolute inset-0" aria-hidden="true">
+              <div className="absolute inset-0 z-[1]" aria-hidden="true">
                 <HeroScene />
               </div>
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--forest)]/75 via-transparent to-white/10 lg:bg-gradient-to-l lg:from-transparent lg:via-transparent lg:to-white/15" />
 
               <HeroReveal
                 delay={0.16}
-                className="absolute left-6 top-6 z-10 rounded-full border border-white/50 bg-white/75 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--forest)] shadow-sm backdrop-blur-sm sm:left-8 sm:top-8"
+                className="absolute left-1 top-6 z-10 inline-flex items-center gap-2 rounded-full border border-white/80 bg-white/90 px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.13em] text-[var(--forest)] shadow-[0_10px_30px_rgba(32,61,38,0.1)] backdrop-blur-sm sm:left-5 sm:top-10"
               >
-                Kashmir, India <span className="mx-1.5 text-[var(--clay)]">/</span> Hand sorted
+                <Leaf size={13} className="text-[#5b9b55]" /> Kashmiri harvest
               </HeroReveal>
 
-              {/* Floating Review Card */}
+              {/* Animated pantry-status widget inspired by the dashboard reference */}
               <HeroReveal
                 delay={0.4}
-                className="absolute bottom-8 left-6 right-6 z-10 rounded-2xl border border-[var(--card-border)] bg-white/95 p-4 text-[var(--forest)] shadow-2xl backdrop-blur-md sm:left-8 sm:right-auto sm:max-w-xs"
+                className="hero-status-panel absolute bottom-4 right-0 z-10 w-[min(100%,330px)] rounded-xl border border-white/80 bg-[#fffefa]/95 p-4 text-[var(--forest)] shadow-[0_18px_50px_rgba(31,61,39,0.17)] backdrop-blur-md sm:bottom-8 sm:right-2 sm:p-5"
               >
-                <div className="flex items-center gap-1 text-[var(--gold)] mb-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={13} className="fill-[var(--gold)]" />
-                  ))}
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <span className="text-[9px] font-bold uppercase tracking-[0.16em] text-[var(--muted)]">The daily pantry</span>
+                    <p className="display mt-1 text-xl font-semibold">Good things, close by.</p>
+                  </div>
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#e6f0df] text-[#4f8d4d]">
+                    <Sparkles size={16} />
+                  </span>
                 </div>
-                <p className="text-xs font-medium leading-5 text-[var(--foreground)]">
-                  &ldquo;Crispest walnuts and almonds we&rsquo;ve ordered. Arrives fresh in vacuum sealed packs within an hour.&rdquo;
-                </p>
-                <div className="mt-2.5 flex items-center justify-between text-[11px] font-bold text-[var(--clay)]">
-                  <span>Pooja S., Tower C</span>
-                  <span className="text-[var(--muted)]">Verified Society Order</span>
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  <div className="rounded-lg bg-[#eff4e9] px-3 py-2.5">
+                    <span className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider text-[var(--muted)]"><span className="h-1.5 w-1.5 rounded-full bg-[#5b9b55]" /> Carefully sorted</span>
+                    <p className="mt-1 text-xs font-bold">Small-batch picks</p>
+                  </div>
+                  <div className="rounded-lg bg-[#fbefd2] px-3 py-2.5">
+                    <span className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider text-[var(--muted)]"><Truck size={11} /> At your door</span>
+                    <p className="mt-1 text-xs font-bold">Within 60 minutes</p>
+                  </div>
                 </div>
               </HeroReveal>
             </div>
           </div>
         </section>
+
+        <CrumbTrail />
 
         {/* Trust & Promise Pillars Section */}
         <section id="promise" className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
@@ -253,86 +262,46 @@ export default async function Home() {
         </section>
 
         {/* Curated Varieties / Moods Section */}
-        <section id="categories" className="bg-[var(--paper-soft)] px-6 py-16 lg:px-10 border-y border-[var(--card-border)]">
+        <section id="categories" className="bg-[#fffefa] px-5 py-14 lg:px-10 lg:py-16">
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <span className="text-xs font-bold uppercase tracking-[.22em] text-[var(--clay)]">
-                  Hand-Curated Varieties
+                <span className="text-[10px] font-bold uppercase tracking-[.2em] text-[#5b9b55]">
+                  A little something for everyone
                 </span>
                 <h2 className="display mt-1 text-3xl font-normal text-[var(--forest)] sm:text-4xl">
-                  Find your daily favourite.
+                  Shop by good mood.
                 </h2>
               </div>
-              <p className="text-xs text-[var(--muted)] max-w-xs leading-5">
-                From morning brain foods to evening snacks, explore our small-batch collections.
+              <p className="text-xs text-[var(--muted)] max-w-xs leading-5 sm:text-right">
+                Pick a pantry favourite and find your new everyday ritual.
               </p>
             </div>
 
-            <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-              <Link
-                href="#collection"
-                className="category-tile bg-[#eae1d0] text-[var(--forest)] group"
-              >
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--forest)]/60">
-                    Kashmiri Harvest
-                  </span>
-                  <p className="display mt-1 text-2xl font-bold">Raw Walnuts</p>
-                </div>
-                <div className="flex items-center justify-between text-xs font-semibold text-[var(--clay)]">
-                  <span>Snow-White & Orchid</span>
-                  <ArrowUpRight size={16} className="transition group-hover:translate-x-1 group-hover:-translate-y-1" />
-                </div>
-              </Link>
-
-              <Link
-                href="#collection"
-                className="category-tile bg-[#dce7d1] text-[var(--forest)] group"
-              >
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--forest)]/60">
-                    Daily Handful
-                  </span>
-                  <p className="display mt-1 text-2xl font-bold">Pure Nuts</p>
-                </div>
-                <div className="flex items-center justify-between text-xs font-semibold text-[var(--forest)]">
-                  <span>Almonds & Cashews</span>
-                  <ArrowUpRight size={16} className="transition group-hover:translate-x-1 group-hover:-translate-y-1" />
-                </div>
-              </Link>
-
-              <Link
-                href="#collection"
-                className="category-tile bg-[#f0d8cc] text-[var(--forest)] group"
-              >
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--forest)]/60">
-                    Naturally Sweet
-                  </span>
-                  <p className="display mt-1 text-2xl font-bold">Dried Fruits</p>
-                </div>
-                <div className="flex items-center justify-between text-xs font-semibold text-[var(--clay)]">
-                  <span>Apricots & Raisins</span>
-                  <ArrowUpRight size={16} className="transition group-hover:translate-x-1 group-hover:-translate-y-1" />
-                </div>
-              </Link>
-
-              <Link
-                href="#collection"
-                className="category-tile bg-[#e5dce4] text-[var(--forest)] group"
-              >
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--forest)]/60">
-                    Superfood Nutrition
-                  </span>
-                  <p className="display mt-1 text-2xl font-bold">Healthy Seeds</p>
-                </div>
-                <div className="flex items-center justify-between text-xs font-semibold text-[var(--forest)]">
-                  <span>Pumpkin & Chia</span>
-                  <ArrowUpRight size={16} className="transition group-hover:translate-x-1 group-hover:-translate-y-1" />
-                </div>
-              </Link>
+            <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:gap-5">
+              {[
+                { title: "Walnuts", category: "Walnuts", note: "Kashmiri harvest", tone: "#e8efd9" },
+                { title: "Nuts", category: "Nuts", note: "A daily handful", tone: "#faedcf" },
+                { title: "Dried fruit", category: "Dried fruit", note: "Naturally sweet", tone: "#f6e1d8" },
+                { title: "Seeds", category: "Seeds", note: "Tiny powerhouses", tone: "#e2ece6" },
+              ].map((item, index) => {
+                const product = products.find((entry) => entry.category === item.category);
+                return (
+                  <Link
+                    key={item.category}
+                    href="#collection"
+                    className="category-orbit group flex min-h-[176px] flex-col items-center justify-center rounded-xl border border-[var(--card-border)] px-3 py-4 text-center transition hover:-translate-y-1 hover:shadow-[0_16px_35px_rgba(25,61,39,0.1)] sm:min-h-[210px]"
+                    style={{ backgroundColor: item.tone, animationDelay: `${index * 90}ms` }}
+                  >
+                    <span className="category-orbit-image relative mb-3 flex h-[92px] w-[92px] items-center justify-center overflow-hidden rounded-full border-[5px] border-white/80 bg-white shadow-sm sm:h-[112px] sm:w-[112px]">
+                      {product && <img src={product.imageUrl} alt="" className="h-full w-full object-cover mix-blend-multiply transition duration-500 group-hover:scale-110" loading="lazy" />}
+                      <span className="absolute -right-0.5 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white text-[var(--forest)] shadow-sm"><ArrowUpRight size={13} /></span>
+                    </span>
+                    <span className="display text-lg font-bold text-[var(--forest)] sm:text-xl">{item.title}</span>
+                    <span className="mt-1 text-[10px] font-semibold text-[var(--muted)] sm:text-[11px]">{item.note}</span>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -342,12 +311,12 @@ export default async function Home() {
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[.22em] text-[var(--clay)]">
+                <div className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[.2em] text-[#5b9b55]">
                   <Sparkles size={14} />
-                  <span>The Fresh Pantry</span>
+                  <span>Picked for your pantry</span>
                 </div>
                 <h2 className="display mt-1 text-4xl font-normal text-[var(--forest)] sm:text-5xl">
-                  Order from our collection.
+                  Today&apos;s good stuff.
                 </h2>
               </div>
               <p className="text-xs text-[var(--muted)] max-w-sm leading-5">

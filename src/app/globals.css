@@ -109,6 +109,110 @@ button, a {
   animation: rise-in 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+.hero-band {
+  background-color: #f2f5e9;
+  background-image: radial-gradient(rgba(35, 80, 47, 0.075) 0.8px, transparent 0.8px);
+  background-size: 18px 18px;
+}
+
+.hero-art-wash {
+  animation: wash-breathe 8s ease-in-out infinite alternate;
+}
+
+.hero-art-photo {
+  filter: saturate(0.83);
+  animation: photo-arrive 900ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+
+.hero-status-panel {
+  animation: panel-arrive 750ms cubic-bezier(0.2, 0.75, 0.25, 1) 180ms both;
+}
+
+.category-orbit {
+  animation: category-arrive 650ms cubic-bezier(0.2, 0.75, 0.25, 1) backwards;
+}
+
+@keyframes wash-breathe {
+  from {
+    transform: scale(0.97) rotate(-2deg);
+  }
+  to {
+    transform: scale(1.03) rotate(2deg);
+  }
+}
+
+@keyframes photo-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 0.3;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes panel-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes category-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.bounce-cta {
+  transform: translateY(0) scale(1);
+  transition: background-color 220ms ease, box-shadow 220ms ease;
+}
+
+.bounce-cta:hover,
+.bounce-cta:focus-visible {
+  animation: cta-bounce 620ms cubic-bezier(0.2, 0.85, 0.25, 1.25) both;
+  box-shadow: 0 14px 28px rgba(31, 83, 41, 0.25);
+}
+
+.bounce-cta:active {
+  transform: scale(0.97);
+  animation: none;
+}
+
+.cta-bounce-icon,
+.cta-bounce-arrow {
+  transition: transform 260ms cubic-bezier(0.2, 0.85, 0.25, 1.25);
+}
+
+.bounce-cta:hover .cta-bounce-icon,
+.bounce-cta:focus-visible .cta-bounce-icon {
+  transform: rotate(-12deg) scale(1.12);
+}
+
+.bounce-cta:hover .cta-bounce-arrow,
+.bounce-cta:focus-visible .cta-bounce-arrow {
+  transform: translate(2px, -2px);
+}
+
+@keyframes cta-bounce {
+  0% { transform: translateY(0) scale(1); }
+  38% { transform: translateY(-6px) scale(1.035); }
+  65% { transform: translateY(1px) scale(0.99); }
+  82% { transform: translateY(-2px) scale(1.01); }
+  100% { transform: translateY(0) scale(1); }
+}
+
 .hero-scene canvas {
   display: block;
   height: 100%;
@@ -146,6 +250,21 @@ button, a {
   .hero-scene canvas {
     animation: none;
     will-change: auto;
+  }
+
+  .hero-art-wash,
+  .hero-art-photo,
+  .hero-status-panel,
+  .category-orbit,
+  .bounce-cta {
+    animation: none;
+  }
+
+  .bounce-cta:hover,
+  .bounce-cta:focus-visible {
+    animation: none;
+    transform: none;
+    box-shadow: 0 8px 22px rgba(52, 105, 50, 0.18);
   }
 }
 
