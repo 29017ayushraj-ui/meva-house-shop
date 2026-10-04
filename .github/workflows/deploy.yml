@@ -3,16 +3,28 @@ name: Deploy to Vercel
 on:
   workflow_dispatch:
   push:
+    branches: [main]
     tags: ["v*.*.*"]
+
+permissions:
+  contents: read
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     steps:
       - uses: actions/checkout@v4
-      - uses: amondnet/vercel-action@v25
+      - uses: actions/setup-node@v4
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: --prod
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm install --global vercel@62.2.0
+      - run: vercel link --yes --project "$VERCEL_PROJECT_ID" --team "$VERCEL_ORG_ID" --token "$VERCEL_TOKEN"
+      - run: vercel pull --yes --environment=production --token "$VERCEL_TOKEN"
+      - run: vercel build --prod --token "$VERCEL_TOKEN"
+      - run: vercel deploy --prebuilt --prod --token "$VERCEL_TOKEN"

@@ -12,6 +12,7 @@ import {
   UserCheck,
 } from "lucide-react";
 import Link from "next/link";
+import HeroScene from "@/components/hero-scene";
 import Storefront from "@/components/storefront";
 import { getProducts } from "@/lib/catalog";
 import { getSession } from "@/lib/auth";
@@ -153,16 +154,23 @@ export default async function Home() {
             </div>
 
             {/* Right Column: Hero Visual with Overlay Card */}
-            <div className="relative min-h-[380px] overflow-hidden bg-[#244534] lg:min-h-full">
+            <div className="relative min-h-[380px] overflow-hidden bg-[#d8c4a9] lg:min-h-full">
               <img
                 src="https://the-meva-house.vercel.app/PHOTO-2026-05-05-08-46-52.jpg"
                 alt="Premium hand-sorted Kashmiri walnuts"
-                className="h-full w-full object-cover mix-blend-luminosity opacity-90 transition duration-700 hover:scale-105"
+                className="absolute inset-0 h-full w-full object-cover opacity-45 mix-blend-multiply transition duration-700 hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--forest)] via-transparent to-transparent lg:hidden" />
+              <div className="absolute inset-0" aria-hidden="true">
+                <HeroScene />
+              </div>
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--forest)]/75 via-transparent to-white/10 lg:bg-gradient-to-l lg:from-transparent lg:via-transparent lg:to-white/15" />
+
+              <div className="absolute left-6 top-6 z-10 rounded-full border border-white/50 bg-white/75 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--forest)] shadow-sm backdrop-blur-sm sm:left-8 sm:top-8">
+                Kashmir, India <span className="mx-1.5 text-[var(--clay)]">/</span> Hand sorted
+              </div>
 
               {/* Floating Review Card */}
-              <div className="absolute bottom-8 left-8 right-8 sm:right-auto sm:max-w-xs rounded-2xl bg-white/95 p-4 text-[var(--forest)] shadow-2xl backdrop-blur-md border border-[var(--card-border)]">
+              <div className="absolute bottom-8 left-6 right-6 z-10 rounded-2xl border border-[var(--card-border)] bg-white/95 p-4 text-[var(--forest)] shadow-2xl backdrop-blur-md sm:left-8 sm:right-auto sm:max-w-xs">
                 <div className="flex items-center gap-1 text-[var(--gold)] mb-1">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} size={13} className="fill-[var(--gold)]" />

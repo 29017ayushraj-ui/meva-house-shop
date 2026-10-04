@@ -179,6 +179,19 @@ npm run build
 
 ## 🌐 Production Deployment
 
-- **Vercel:** Add environment variables (`DATABASE_URL`, `AUTH_SECRET`, `ADMIN_EMAIL`, `NEXT_PUBLIC_WHATSAPP`, `RESEND_API_KEY`, `EMAIL_FROM`). Run `npx prisma migrate deploy` in your build script.
+- **Vercel:** Import this repository with `meva-house-shop` as the project root. Add a PostgreSQL integration such as Neon from the Vercel Marketplace, then configure `DATABASE_URL`, `AUTH_SECRET`, `ADMIN_EMAIL`, `NEXT_PUBLIC_WHATSAPP`, `RESEND_API_KEY`, and `EMAIL_FROM` in the Vercel project settings.
+- **Database setup:** Vercel hosts the Next.js app and API functions; PostgreSQL runs with the selected managed database provider. This project has no checked-in migration history, so initialize a new database with `DATABASE_URL` set by running `npm run db:setup`. This pushes the Prisma schema and seeds the admin/catalog data. Do not run this against a database containing data you need to preserve without reviewing the schema changes first.
+- **Vercel database bootstrap:** For a new, empty production database, temporarily set `INITIALIZE_PRODUCTION_DATABASE=1` in the Vercel Production environment and deploy once. The build runs `db:setup` only when this flag is set and `VERCEL_ENV` is `production`. Remove the flag after the successful deployment; normal builds never push schema changes or seed data.
+- **Vercel deployment:** The build runs `prisma generate` before `next build`. Keep `AUTH_SECRET` set to a random secret. To use admin email OTP, also set `ADMIN_EMAIL`, `RESEND_API_KEY`, and `EMAIL_FROM` to an address/key you control.
 - **Docker:** Build the provided `Dockerfile` using `docker compose up --build`.
-- **Database:** Compatible with Supabase, Neon, AWS RDS, or any managed PostgreSQL instance.
+- **Database:** Also compatible with Supabase, AWS RDS, or any managed PostgreSQL instance.
+
+### GitHub Actions Deployment
+
+The `CI` workflow validates pull requests and pushes to `main`. The `Deploy to Vercel` workflow deploys pushes to `main`, version tags, or manual dispatch. Add these Actions secrets to the destination GitHub repository:
+
+- `VERCEL_TOKEN`
+- `VERCEL_ORG_ID`
+- `VERCEL_PROJECT_ID`
+
+The deployment workflow links the project, pulls its Production settings, builds with Vercel, and deploys the prebuilt output. Do not put database credentials or `AUTH_SECRET` in GitHub; they are managed by the Vercel project and Neon integration.

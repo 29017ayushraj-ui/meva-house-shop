@@ -473,24 +473,22 @@ export default function Storefront({ products }: { products: Product[] }) {
       )}
 
       {/* Floating Bag Pill Button */}
-      <button
-        onClick={() => setCartDrawerOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-3 rounded-full bg-[var(--clay)] px-5 py-3.5 text-sm font-bold text-white shadow-2xl transition hover:bg-[var(--clay-hover)] hover:scale-105 active:scale-95 cursor-pointer"
-        aria-label="View shopping bag"
-      >
-        <ShoppingBag size={19} />
-        <span>View Bag</span>
-        {cartCount > 0 && (
+      {cartCount > 0 && (
+        <button
+          onClick={() => setCartDrawerOpen(true)}
+          className="fixed bottom-6 right-6 z-40 flex items-center gap-3 rounded-full bg-[var(--clay)] px-5 py-3.5 text-sm font-bold text-white shadow-2xl transition hover:bg-[var(--clay-hover)] hover:scale-105 active:scale-95 cursor-pointer"
+          aria-label="View shopping bag"
+        >
+          <ShoppingBag size={19} />
+          <span>View Bag</span>
           <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-white px-1.5 text-xs font-extrabold text-[var(--clay)]">
             {cartCount}
           </span>
-        )}
-        {cartSubtotal > 0 && (
           <span className="border-l border-white/25 pl-2 text-xs font-semibold">
             ₹{cartSubtotal}
           </span>
-        )}
-      </button>
+        </button>
+      )}
 
       {/* Slide-over Cart Drawer */}
       {cartDrawerOpen && (
