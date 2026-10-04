@@ -113,6 +113,20 @@ button, a {
   display: block;
   height: 100%;
   width: 100%;
+  transform-origin: center;
+  animation: hero-bowl-float 3.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes hero-bowl-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotateZ(-0.35deg);
+  }
+
+  50% {
+    transform: translate3d(0, -9px, 0) rotateZ(0.35deg);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -127,6 +141,11 @@ button, a {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .hero-scene canvas {
+    animation: none;
+    will-change: auto;
   }
 }
 
