@@ -185,9 +185,18 @@ export default function NutBowlScene() {
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let animationFrame = 0;
+    let elapsed = 0;
+    let previousFrameTime = 0;
     let pointerRotation = 0;
     const animate = (time: number) => {
-      display.rotation.y += (pointerRotation + Math.sin(time * 0.00022) * 0.055 - display.rotation.y) * 0.025;
+      if (previousFrameTime > 0) elapsed += Math.min(time - previousFrameTime, 50);
+      previousFrameTime = time;
+
+      const seconds = elapsed / 1000;
+      display.rotation.y = seconds * 0.26 + pointerRotation + Math.sin(seconds * 1.1) * 0.025;
+      display.rotation.x = Math.sin(seconds * 1.3) * 0.025;
+      display.position.y = -0.34 + Math.sin(seconds * 1.7) * 0.045;
+      fillLight.position.x = 3 + Math.sin(seconds * 0.75) * 0.45;
       renderer.render(scene, camera);
       animationFrame = window.requestAnimationFrame(animate);
     };
@@ -199,18 +208,39 @@ export default function NutBowlScene() {
       pointerRotation = 0;
     };
 
-    if (!prefersReducedMotion.matches) {
+    const startAnimation = () => {
+      if (animationFrame || prefersReducedMotion.matches || document.hidden) return;
+      previousFrameTime = 0;
       animationFrame = window.requestAnimationFrame(animate);
       container.addEventListener("pointermove", handlePointerMove);
       container.addEventListener("pointerleave", resetPointer);
-    }
-
-    return () => {
-      window.cancelAnimationFrame(animationFrame);
-      resizeObserver.disconnect();
-      window.removeEventListener("resize", resize);
+    };
+    const stopAnimation = () => {
+      if (animationFrame) window.cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+      previousFrameTime = 0;
       container.removeEventListener("pointermove", handlePointerMove);
       container.removeEventListener("pointerleave", resetPointer);
+    };
+    const handleVisibilityChange = () => {
+      if (document.hidden) stopAnimation();
+      else startAnimation();
+    };
+    const handleMotionPreferenceChange = () => {
+      if (prefersReducedMotion.matches) stopAnimation();
+      else startAnimation();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    prefersReducedMotion.addEventListener("change", handleMotionPreferenceChange);
+    startAnimation();
+
+    return () => {
+      stopAnimation();
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      prefersReducedMotion.removeEventListener("change", handleMotionPreferenceChange);
       scene.traverse((object) => {
         if (object instanceof THREE.Mesh) {
           object.geometry.dispose();
